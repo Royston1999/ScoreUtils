@@ -1,4 +1,4 @@
-# C:\Users\royst\OneDrive\Desktop\BeatSaberModding\android-ndk-r23b
+# Score Utils
 
 retrieves score information about the selected map
 
