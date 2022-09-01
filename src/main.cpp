@@ -4,13 +4,6 @@
 
 static ModInfo modInfo; // Stores the ID and version of our mod, and is sent to the modloader upon startup
 
-// Loads the config from disk using our modInfo, then returns it for use
-Configuration& getConfig() {
-    static Configuration config(modInfo);
-    config.Load();
-    return config;
-}
-
 // Returns a logger, useful for printing debug messages
 Logger& getLogger() {
     static Logger* logger = new Logger(modInfo);
@@ -22,16 +15,15 @@ extern "C" void setup(ModInfo& info) {
     info.id = ID;
     info.version = VERSION;
     modInfo = info;
-	
-    getConfig().Load(); // Load the config file
+    
     getLogger().info("Completed setup!");
 }
 
-// Called later on in the game loading - a good time to install function hooks
-extern "C" void load() {
-    Modloader::requireMod("PinkCore");
-    il2cpp_functions::Init();
-    getLogger().info("Installing hooks...");
-    InstallHooks();
-    getLogger().info("Installed all hooks!");
+bool isInit = false;
+
+void ScoreUtils::Init(){
+    if (!isInit){
+        isInit = true;
+        InstallHooks();
+    }
 }

@@ -10,26 +10,22 @@
 #include "GlobalNamespace/BeatmapEnvironmentHelper.hpp"
 #include "GlobalNamespace/IDifficultyBeatmapSet.hpp"
 #include "GlobalNamespace/IDifficultyBeatmap.hpp"
+#include "GlobalNamespace/BeatmapCharacteristicSO.hpp"
 #include "GlobalNamespace/IBeatmapLevel.hpp"
 #include "GlobalNamespace/PlayerDataModel.hpp"
 
 #include "UnityEngine/Resources.hpp"
 
 #include "System/Threading/Tasks/Task_1.hpp"
-#include "System/Func_2.hpp"
 #include "System/Action_1.hpp"
-
-#include "pinkcore/shared/LevelDetailAPI.hpp"
 
 using namespace GlobalNamespace;
 using namespace UnityEngine;
 
 namespace ScoreUtils::MaxScoreRetriever{
 
+    IDifficultyBeatmap* currentlySelectedMap;
     ScoreValuesMap maxScoreValues;
-    bool hasCJD;
-    bool hasNoodle;
-    GlobalNamespace::MenuTransitionsHelper* menuTrans;
 
     void addMaxScoreData(IDifficultyBeatmap* difficultyBeatmap, int maxScore){
         auto levelID = difficultyBeatmap->get_level()->i_IPreviewBeatmapLevel()->get_levelID();
@@ -64,27 +60,24 @@ namespace ScoreUtils::MaxScoreRetriever{
         return maxScore;
     }
 
-    bool hasNoodleRequirement(std::vector<std::string>& requirements){
-        return std::count(requirements.begin(), requirements.end(), "Noodle Extensions");
-    }
-
     using MapTask = System::Threading::Tasks::Task_1<IReadonlyBeatmapData*>;
     using Task = System::Threading::Tasks::Task;
     using Action = System::Action_1<Task*>;
-    #define TaskComplete(Func) custom_types::MakeDelegate<Action*>(classof(Action*), static_cast<std::function<void(MapTask*)>>(Func)) \
+    using Function = std::function<void(MapTask*)>;
 
-    void RetrieveMaxScoreFromMapData(GlobalNamespace::PlayerData* playerData, GlobalNamespace::IDifficultyBeatmap* difficultyBeatmap, function_ptr_t<void, int> callback){
-        bool requiresNoodle = hasNoodleRequirement(PinkCore::API::GetCurrentMapData().currentRequirements);     
-        if (hasCJD && !hasNoodle && requiresNoodle) callback == nullptr ? announceScoreAcquired(-1) : callback(-1);
-        else{
-            EnvironmentInfoSO* envInfo = BeatmapEnvironmentHelper::GetEnvironmentInfo(difficultyBeatmap);
-            reinterpret_cast<Task*>(difficultyBeatmap->GetBeatmapDataAsync(envInfo, playerData->playerSpecificSettings))->ContinueWith(TaskComplete([=](MapTask* result){
-                IReadonlyBeatmapData* mapData = result->get_ResultOnSuccess();
-                int maxScore = mapData != nullptr ? ScoreModel::ComputeMaxMultipliedScoreForBeatmap(mapData) : -1;
-                if (maxScore != -1) addMaxScoreData(difficultyBeatmap, maxScore);
-                callback == nullptr ? announceScoreAcquired(maxScore) : callback(maxScore);
-            }));
-        }
+    #define MapTaskFinish(Func) custom_types::MakeDelegate<Action*>(classof(Action*), static_cast<Function>(Func)) \
+
+    void RetrieveMaxScoreFromMapData(PlayerData* playerData, IDifficultyBeatmap* difficultyBeatmap, function_ptr_t<void, int> callback){
+        currentlySelectedMap = difficultyBeatmap;
+        EnvironmentInfoSO* envInfo = BeatmapEnvironmentHelper::GetEnvironmentInfo(difficultyBeatmap);
+        PlayerSpecificSettings* settings = playerData->playerSpecificSettings;
+        reinterpret_cast<Task*>(difficultyBeatmap->GetBeatmapDataAsync(envInfo, settings))->ContinueWith(MapTaskFinish([=](MapTask* result){
+            IReadonlyBeatmapData* mapData = result->get_ResultOnSuccess();
+            int maxScore = mapData != nullptr ? ScoreModel::ComputeMaxMultipliedScoreForBeatmap(mapData) : -1;
+            addMaxScoreData(difficultyBeatmap, maxScore);
+            if (difficultyBeatmap != currentlySelectedMap) return;
+            callback == nullptr ? announceScoreAcquired(maxScore) : callback(maxScore);
+        }));
     }
 
     void acquireMaxScore(PlayerData* playerData, IDifficultyBeatmap* difficultyBeatmap){

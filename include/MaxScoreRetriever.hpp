@@ -19,11 +19,4 @@ namespace ScoreUtils::MaxScoreRetriever{
     /// @brief retrieves the maximum score available for the selected map. returns -1 if unable to get data.
     void acquireMaxScore(GlobalNamespace::PlayerData* playerData, GlobalNamespace::IDifficultyBeatmap* difficultyBeatmap);
     void RetrieveMaxScoreFromMapData(GlobalNamespace::PlayerData* playerData, GlobalNamespace::IDifficultyBeatmap* difficultyBeatmap, function_ptr_t<void, int> callback = nullptr);
-    template<class T>
-    void ClearVector(std::vector<T>* vector){
-        vector->clear(); std::vector<T>().swap(*vector);
-    };
-    extern bool hasCJD;
-    extern bool hasNoodle;
-    extern GlobalNamespace::MenuTransitionsHelper* menuTrans;
 }

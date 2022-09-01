@@ -30,15 +30,6 @@ MAKE_HOOK_MATCH(LevelSelect, &StandardLevelDetailView::RefreshContent, void, Sta
     if (ScoreUtils::MaxScoreRetriever::GetRetrievedMaxScoreCallback().size() >= 1) ScoreUtils::MaxScoreRetriever::acquireMaxScore(self->playerData, self->selectedDifficultyBeatmap);
 }
 
-MAKE_HOOK_MATCH(Startup, &MainMenuViewController::DidActivate, void, MainMenuViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
-    Startup(self, firstActivation, addedToHierarchy, screenSystemEnabling);
-    if (firstActivation){
-        ScoreUtils::MaxScoreRetriever::hasCJD = Modloader::requireMod("CustomJSONData");
-        ScoreUtils::MaxScoreRetriever::hasNoodle = Modloader::requireMod("NoodleExtensions");
-        ScoreUtils::MaxScoreRetriever::menuTrans = UnityEngine::Resources::FindObjectsOfTypeAll<MenuTransitionsHelper*>()->get(0);
-    }
-}
-
 MAKE_HOOK_MATCH(NoodleFix_1, &BeatmapObjectsInTimeRowProcessor::HandleCurrentTimeSliceAllNotesAndSlidersDidFinishTimeSlice, void, BeatmapObjectsInTimeRowProcessor* self,
                 BeatmapObjectsInTimeRowProcessor::TimeSliceContainer_1<::GlobalNamespace::BeatmapDataItem*>* allObjectsTimeSlice, float nextTimeSliceTime) {      
     if (!canRunNoodleCrashHook) return;
@@ -54,6 +45,7 @@ MAKE_HOOK_MATCH(NoodleFix_2, &StandardLevelScenesTransitionSetupDataSO::Init, vo
 
 MAKE_HOOK_MATCH(MultiLevelStart, &MultiplayerLevelScenesTransitionSetupDataSO::Init, void, MultiplayerLevelScenesTransitionSetupDataSO* self, ::StringW gameMode, ::GlobalNamespace::IPreviewBeatmapLevel* previewBeatmapLevel, ::GlobalNamespace::BeatmapDifficulty beatmapDifficulty, ::GlobalNamespace::BeatmapCharacteristicSO* beatmapCharacteristic, ::GlobalNamespace::IDifficultyBeatmap* difficultyBeatmap, ::GlobalNamespace::ColorScheme* overrideColorScheme, ::GlobalNamespace::GameplayModifiers* gameplayModifiers, ::GlobalNamespace::PlayerSpecificSettings* playerSpecificSettings, ::GlobalNamespace::PracticeSettings* practiceSettings, bool useTestNoteCutSoundEffects){
     MultiLevelStart(self, gameMode, previewBeatmapLevel, beatmapDifficulty, beatmapCharacteristic, difficultyBeatmap, overrideColorScheme, gameplayModifiers, playerSpecificSettings, practiceSettings, useTestNoteCutSoundEffects);
+    canRunNoodleCrashHook = true;
     if (ScoreUtils::MaxScoreRetriever::GetRetrievedMaxScoreCallback().size() >= 1){
         auto* playerData = UnityEngine::Resources::FindObjectsOfTypeAll<PlayerDataModel*>()->get(0)->get_playerData();
         ScoreUtils::MaxScoreRetriever::acquireMaxScore(playerData, difficultyBeatmap);
@@ -62,7 +54,6 @@ MAKE_HOOK_MATCH(MultiLevelStart, &MultiplayerLevelScenesTransitionSetupDataSO::I
 
 void InstallHooks(){
     INSTALL_HOOK(getLogger(), LevelSelect);
-    INSTALL_HOOK(getLogger(), Startup);
     INSTALL_HOOK(getLogger(), MultiLevelStart);
     INSTALL_HOOK(getLogger(), NoodleFix_1);
     INSTALL_HOOK(getLogger(), NoodleFix_2);
