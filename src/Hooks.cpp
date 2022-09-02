@@ -1,9 +1,9 @@
-#include "GlobalNamespace/StandardLevelDetailView.hpp"
-#include "GlobalNamespace/IDifficultyBeatmap.hpp"
-#include "GlobalNamespace/IBeatmapLevel.hpp"
-#include "GlobalNamespace/PlayerDataModel.hpp"
 #include "GlobalNamespace/MultiplayerLevelScenesTransitionSetupDataSO.hpp"
+#include "GlobalNamespace/PlayerDataModel.hpp"
+#include "GlobalNamespace/StandardLevelDetailView.hpp"
+
 #include "UnityEngine/Resources.hpp"
+
 #include "main.hpp"
 #include "Hooks.hpp"
 #include "MaxScoreRetriever.hpp"
