@@ -1,14 +1,11 @@
 #pragma once
 #include "main.hpp"
+
 #include "beatsaber-hook/shared/utils/typedefs.h"
-#include "custom-types/shared/coroutine.hpp"
-#include "GlobalNamespace/IReadonlyBeatmapData.hpp"
-#include "GlobalNamespace/PlayerLevelStatsData.hpp"
-#include "GlobalNamespace/PlayerData.hpp"
+
 #include "GlobalNamespace/IDifficultyBeatmap.hpp"
-#include "GlobalNamespace/PlayerSpecificSettings.hpp"
-#include "System/Threading/Tasks/Task_1.hpp"
-#include "GlobalNamespace/MenuTransitionsHelper.hpp"
+#include "GlobalNamespace/PlayerData.hpp"
+
 #include <map>
 
 using DiffMap = std::map<int, int>;

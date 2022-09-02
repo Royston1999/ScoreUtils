@@ -1,6 +1,7 @@
 #pragma once
 
 #include "beatsaber-hook/shared/utils/typedefs-wrappers.hpp"
+
 #include "GlobalNamespace/IDifficultyBeatmap.hpp"
 
 namespace ScoreUtils{
