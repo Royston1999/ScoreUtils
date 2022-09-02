@@ -15,8 +15,6 @@ extern "C" void setup(ModInfo& info) {
     info.id = ID;
     info.version = VERSION;
     modInfo = info;
-    
-    getLogger().info("Completed setup!");
 }
 
 bool isInit = false;
@@ -24,6 +22,8 @@ bool isInit = false;
 void ScoreUtils::Init(){
     if (!isInit){
         isInit = true;
+        setup(modInfo);
         InstallHooks();
+        getLogger().info("ScoreUtils has been initialised!");
     }
 }

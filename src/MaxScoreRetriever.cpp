@@ -18,13 +18,13 @@
 
 #include "System/Threading/Tasks/Task_1.hpp"
 #include "System/Action_1.hpp"
+#include "System/Threading/CancellationToken.hpp"
+#include "System/Threading/CancellationTokenSource.hpp"
 
 using namespace GlobalNamespace;
 using namespace UnityEngine;
 
 namespace ScoreUtils::MaxScoreRetriever{
-
-    IDifficultyBeatmap* currentlySelectedMap;
     ScoreValuesMap maxScoreValues;
 
     void addMaxScoreData(IDifficultyBeatmap* difficultyBeatmap, int maxScore){
@@ -67,6 +67,8 @@ namespace ScoreUtils::MaxScoreRetriever{
 
     #define MapTaskFinish(Func) custom_types::MakeDelegate<Action*>(classof(Action*), static_cast<Function>(Func)) \
 
+    IDifficultyBeatmap* currentlySelectedMap;
+
     void RetrieveMaxScoreFromMapData(PlayerData* playerData, IDifficultyBeatmap* difficultyBeatmap, function_ptr_t<void, int> callback){
         currentlySelectedMap = difficultyBeatmap;
         EnvironmentInfoSO* envInfo = BeatmapEnvironmentHelper::GetEnvironmentInfo(difficultyBeatmap);
@@ -75,8 +77,8 @@ namespace ScoreUtils::MaxScoreRetriever{
             IReadonlyBeatmapData* mapData = result->get_ResultOnSuccess();
             int maxScore = mapData != nullptr ? ScoreModel::ComputeMaxMultipliedScoreForBeatmap(mapData) : -1;
             addMaxScoreData(difficultyBeatmap, maxScore);
-            if (difficultyBeatmap != currentlySelectedMap) return;
-            callback == nullptr ? announceScoreAcquired(maxScore) : callback(maxScore);
+            if (difficultyBeatmap != currentlySelectedMap) return getLogger().info("Not the selected map! blocking callback!");
+            announceScoreAcquired(maxScore, callback);
         }));
     }
 

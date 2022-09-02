@@ -12,4 +12,4 @@
 
 Logger& getLogger();
 
-void announceScoreAcquired(int x);
+void announceScoreAcquired(int x, function_ptr_t<void, int> callback = nullptr);
