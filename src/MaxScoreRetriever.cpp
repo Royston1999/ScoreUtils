@@ -57,14 +57,14 @@ namespace ScoreUtils::MaxScoreRetriever{
         return maxScore;
     }
 
+    IDifficultyBeatmap* currentlySelectedMap;
+
     using MapTask = System::Threading::Tasks::Task_1<IReadonlyBeatmapData*>;
     using Task = System::Threading::Tasks::Task;
     using Action = System::Action_1<Task*>;
     using Function = std::function<void(MapTask*)>;
 
     #define MapTaskFinish(Func) custom_types::MakeDelegate<Action*>(classof(Action*), static_cast<Function>(Func)) \
-
-    IDifficultyBeatmap* currentlySelectedMap;
 
     void RetrieveMaxScoreFromMapData(PlayerData* playerData, IDifficultyBeatmap* difficultyBeatmap, function_ptr_t<void, int> callback){
         currentlySelectedMap = difficultyBeatmap;
