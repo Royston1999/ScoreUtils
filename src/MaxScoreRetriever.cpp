@@ -71,7 +71,6 @@ namespace ScoreUtils::MaxScoreRetriever{
     }
 
     void acquireMaxScore(Il2CppObject* playerData, Il2CppObject* difficultyBeatmap){
-        currentDifficultyBeatmap = difficultyBeatmap;
         int score = RetrieveMaxScoreDataFromCache();
         if (score != -1) return announceScoreAcquired(score);
         RetrieveMaxScoreFromMapData(playerData, difficultyBeatmap, nullptr);
