@@ -3,11 +3,11 @@
   "dependenciesDir": "extern",
   "info": {
     "name": "Score Utils",
-    "id": "ScoreUtils",
+    "id": "scoreutils",
     "version": "0.1.0",
     "url": null,
     "additionalData": {
-      "overrideSoName": "libScoreUtils.so"
+      "overrideSoName": "libscoreutils.so"
     }
   },
   "dependencies": [
