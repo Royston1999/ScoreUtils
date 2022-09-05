@@ -3,9 +3,6 @@
 
 #include "beatsaber-hook/shared/utils/typedefs.h"
 
-#include "GlobalNamespace/IDifficultyBeatmap.hpp"
-#include "GlobalNamespace/PlayerData.hpp"
-
 #include <map>
 
 using DiffMap = std::map<int, int>;
@@ -14,6 +11,7 @@ using ScoreValuesMap = std::map<std::string, CharacMap>;
 
 namespace ScoreUtils::MaxScoreRetriever{
     /// @brief retrieves the maximum score available for the selected map. returns -1 if unable to get data.
-    void acquireMaxScore(GlobalNamespace::PlayerData* playerData, GlobalNamespace::IDifficultyBeatmap* difficultyBeatmap);
-    void RetrieveMaxScoreFromMapData(GlobalNamespace::PlayerData* playerData, GlobalNamespace::IDifficultyBeatmap* difficultyBeatmap, function_ptr_t<void, int> callback = nullptr);
+    void acquireMaxScore(Il2CppObject* playerData, Il2CppObject* difficultyBeatmap);
+    void RetrieveMaxScoreFromMapData(Il2CppObject* playerData, Il2CppObject* difficultyBeatmap, function_ptr_t<void, int> callback = nullptr);
+    extern Il2CppObject* currentDifficultyBeatmap;
 }
