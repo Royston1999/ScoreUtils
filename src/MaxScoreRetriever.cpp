@@ -11,7 +11,7 @@
 
 namespace ScoreUtils::MaxScoreRetriever{
     ScoreValuesMap maxScoreValues;
-    Il2CppObject* currentDifficultyBeatmap;
+    Il2CppObject* currentDifficultyBeatmap = nullptr;
 
     void addMaxScoreData(Il2CppObject* difficultyBeatmap, int maxScore){
         std::string levelID = *il2cpp_utils::RunMethod<StringW>(THROW_UNLESS(il2cpp_utils::RunMethod(difficultyBeatmap, "get_level")), "get_levelID");
@@ -71,13 +71,13 @@ namespace ScoreUtils::MaxScoreRetriever{
     }
 
     void acquireMaxScore(Il2CppObject* playerData, Il2CppObject* difficultyBeatmap){
-        int score = RetrieveMaxScoreDataFromCache();
+        int score = currentDifficultyBeatmap != nullptr ? RetrieveMaxScoreDataFromCache() : -1;
         if (score != -1) return announceScoreAcquired(score);
         RetrieveMaxScoreFromMapData(playerData, difficultyBeatmap, nullptr);
     }
 
     void RetrieveMaxScoreDataCustomCallback(function_ptr_t<void, int> callback){
-        int score = RetrieveMaxScoreDataFromCache();
+        int score = currentDifficultyBeatmap != nullptr ? RetrieveMaxScoreDataFromCache() : -1;
         if (score != -1) return callback(score);
         auto* internal = THROW_UNLESS(il2cpp_utils::FindMethodUnsafe("UnityEngine", "Resources", "FindObjectsOfTypeAll", 0));
         auto* generic = THROW_UNLESS(il2cpp_utils::MakeGenericMethod(internal, {il2cpp_utils::GetClassFromName("", "PlayerDataModel")}));
