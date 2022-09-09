@@ -14,4 +14,5 @@ namespace ScoreUtils::MaxScoreRetriever{
     void acquireMaxScore(Il2CppObject* playerData, Il2CppObject* difficultyBeatmap);
     void RetrieveMaxScoreFromMapData(Il2CppObject* playerData, Il2CppObject* difficultyBeatmap, function_ptr_t<void, int> callback = nullptr);
     extern Il2CppObject* currentDifficultyBeatmap;
+    extern std::map<Il2CppObject*, std::function<void(Il2CppObject*)>> taskMap;
 }
