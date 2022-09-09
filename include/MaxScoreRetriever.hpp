@@ -16,4 +16,5 @@ namespace ScoreUtils::MaxScoreRetriever{
     /// @brief retrieves the maximum score available for the selected map. returns -1 if unable to get data.
     void acquireMaxScore(GlobalNamespace::PlayerData* playerData, GlobalNamespace::IDifficultyBeatmap* difficultyBeatmap);
     void RetrieveMaxScoreFromMapData(GlobalNamespace::PlayerData* playerData, GlobalNamespace::IDifficultyBeatmap* difficultyBeatmap, function_ptr_t<void, int> callback = nullptr);
+    extern GlobalNamespace::IDifficultyBeatmap* currentlySelectedMap;
 }

@@ -14,11 +14,13 @@ using namespace ScoreUtils;
 
 MAKE_HOOK_MATCH(LevelSelect, &StandardLevelDetailView::RefreshContent, void, StandardLevelDetailView* self) {
     LevelSelect(self);
+    MaxScoreRetriever::currentlySelectedMap = self->get_selectedDifficultyBeatmap();
     if (MaxScoreRetriever::GetRetrievedMaxScoreCallback().size() >= 1) MaxScoreRetriever::acquireMaxScore(self->playerData, self->selectedDifficultyBeatmap);
 }
 
 MAKE_HOOK_MATCH(MultiLevelStart, &MultiplayerLevelScenesTransitionSetupDataSO::Init, void, MultiplayerLevelScenesTransitionSetupDataSO* self, StringW gameMode, IPreviewBeatmapLevel* previewBeatmapLevel, BeatmapDifficulty beatmapDifficulty, BeatmapCharacteristicSO* beatmapCharacteristic, IDifficultyBeatmap* difficultyBeatmap, ColorScheme* overrideColorScheme, GameplayModifiers* gameplayModifiers, PlayerSpecificSettings* playerSpecificSettings, PracticeSettings* practiceSettings, bool useTestNoteCutSoundEffects){
     MultiLevelStart(self, gameMode, previewBeatmapLevel, beatmapDifficulty, beatmapCharacteristic, difficultyBeatmap, overrideColorScheme, gameplayModifiers, playerSpecificSettings, practiceSettings, useTestNoteCutSoundEffects);
+    MaxScoreRetriever::currentlySelectedMap = self->get_difficultyBeatmap();
     if (MaxScoreRetriever::GetRetrievedMaxScoreCallback().size() >= 1){
         auto* playerData = UnityEngine::Resources::FindObjectsOfTypeAll<PlayerDataModel*>()->get(0)->get_playerData();
         MaxScoreRetriever::acquireMaxScore(playerData, difficultyBeatmap);

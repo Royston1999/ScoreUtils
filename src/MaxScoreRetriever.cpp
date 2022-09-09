@@ -23,6 +23,7 @@ using namespace UnityEngine;
 
 namespace ScoreUtils::MaxScoreRetriever{
     ScoreValuesMap maxScoreValues;
+    IDifficultyBeatmap* currentlySelectedMap;
 
     void addMaxScoreData(IDifficultyBeatmap* difficultyBeatmap, int maxScore){
         auto levelID = difficultyBeatmap->get_level()->i_IPreviewBeatmapLevel()->get_levelID();
@@ -46,18 +47,16 @@ namespace ScoreUtils::MaxScoreRetriever{
         else foundDiff->second = maxScore;
     }
 
-    int RetrieveMaxScoreDataFromCache(IDifficultyBeatmap* difficultyBeatmap){
-        auto foundLevel = maxScoreValues.find(difficultyBeatmap->get_level()->i_IPreviewBeatmapLevel()->get_levelID());
+    int RetrieveMaxScoreDataFromCache(){
+        auto foundLevel = maxScoreValues.find(currentlySelectedMap->get_level()->i_IPreviewBeatmapLevel()->get_levelID());
         if (foundLevel == maxScoreValues.end()) return -1;
-        auto foundCharac = foundLevel->second.find(difficultyBeatmap->get_parentDifficultyBeatmapSet()->get_beatmapCharacteristic()->serializedName);
+        auto foundCharac = foundLevel->second.find(currentlySelectedMap->get_parentDifficultyBeatmapSet()->get_beatmapCharacteristic()->serializedName);
         if (foundCharac == foundLevel->second.end()) return -1;
-        auto foundDiff = foundCharac->second.find((int)difficultyBeatmap->get_difficulty());
+        auto foundDiff = foundCharac->second.find((int)currentlySelectedMap->get_difficulty());
         if (foundDiff == foundCharac->second.end()) return -1;
         int maxScore = foundDiff->second;
         return maxScore;
     }
-
-    IDifficultyBeatmap* currentlySelectedMap;
 
     using MapTask = System::Threading::Tasks::Task_1<IReadonlyBeatmapData*>;
     using Task = System::Threading::Tasks::Task;
@@ -80,15 +79,15 @@ namespace ScoreUtils::MaxScoreRetriever{
     }
 
     void acquireMaxScore(PlayerData* playerData, IDifficultyBeatmap* difficultyBeatmap){
-        int score = RetrieveMaxScoreDataFromCache(difficultyBeatmap);
+        int score = RetrieveMaxScoreDataFromCache();
         if (score != -1) return announceScoreAcquired(score);
         RetrieveMaxScoreFromMapData(playerData, difficultyBeatmap);
     }
 
-    void RetrieveMaxScoreDataCustomCallback(GlobalNamespace::IDifficultyBeatmap* difficultyBeatmap, function_ptr_t<void, int> callback){
-        int score = RetrieveMaxScoreDataFromCache(difficultyBeatmap);
+    void RetrieveMaxScoreDataCustomCallback(function_ptr_t<void, int> callback){
+        int score = RetrieveMaxScoreDataFromCache();
         if (score != -1) return callback(score);
         auto* playerData = UnityEngine::Resources::FindObjectsOfTypeAll<PlayerDataModel*>()->get(0)->get_playerData();
-        RetrieveMaxScoreFromMapData(playerData, difficultyBeatmap, callback);
+        RetrieveMaxScoreFromMapData(playerData, currentlySelectedMap, callback);
     }
 }
