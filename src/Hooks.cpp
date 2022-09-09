@@ -12,7 +12,7 @@ MAKE_HOOK_FIND_CLASS_UNSAFE_INSTANCE(MultiLevelStart, "", "MultiplayerLevelScene
     if (MaxScoreRetriever::GetRetrievedMaxScoreCallback().size() >= 1){
         auto* internal = THROW_UNLESS(il2cpp_utils::FindMethodUnsafe("UnityEngine", "Resources", "FindObjectsOfTypeAll", 0));
         auto* generic = THROW_UNLESS(il2cpp_utils::MakeGenericMethod(internal, {il2cpp_utils::GetClassFromName("", "PlayerDataModel")}));
-        auto model = THROW_UNLESS(il2cpp_utils::RunMethodRethrow<ArrayW<Il2CppObject*>, false>((Il2CppObject*)nullptr, generic)).get(0);
+        auto* model = THROW_UNLESS(il2cpp_utils::RunStaticMethod<ArrayW<Il2CppObject*>>(generic)).get(0);
         auto* playerData = THROW_UNLESS(il2cpp_utils::RunMethod(model, "get_playerData"));
         MaxScoreRetriever::acquireMaxScore(playerData, beatmap);
     }

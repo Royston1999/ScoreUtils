@@ -16,7 +16,7 @@ namespace ScoreUtils::MaxScoreRetriever{
     void addMaxScoreData(Il2CppObject* difficultyBeatmap, int maxScore){
         std::string levelID = *il2cpp_utils::RunMethod<StringW>(THROW_UNLESS(il2cpp_utils::RunMethod(difficultyBeatmap, "get_level")), "get_levelID");
         std::string characteristic = *il2cpp_utils::RunMethod<StringW>(THROW_UNLESS(il2cpp_utils::RunMethod(THROW_UNLESS(il2cpp_utils::RunMethod(difficultyBeatmap, "get_parentDifficultyBeatmapSet")), "get_beatmapCharacteristic")), "get_serializedName");
-        auto difficulty = *il2cpp_utils::RunMethod<int>(difficultyBeatmap, "get_difficulty");
+        int difficulty = *il2cpp_utils::RunMethod<int>(difficultyBeatmap, "get_difficulty");
 
         auto foundLevel = maxScoreValues.find(levelID);
         if (foundLevel == maxScoreValues.end()) {
@@ -36,9 +36,9 @@ namespace ScoreUtils::MaxScoreRetriever{
     }
 
     int RetrieveMaxScoreDataFromCache(){
-        auto levelID = *il2cpp_utils::RunMethod<StringW>(THROW_UNLESS(il2cpp_utils::RunMethod(currentDifficultyBeatmap, "get_level")), "get_levelID");
-        auto characteristic = *il2cpp_utils::RunMethod<StringW>(THROW_UNLESS(il2cpp_utils::RunMethod(THROW_UNLESS(il2cpp_utils::RunMethod(currentDifficultyBeatmap, "get_parentDifficultyBeatmapSet")), "get_beatmapCharacteristic")), "get_serializedName");
-        auto difficulty = *il2cpp_utils::RunMethod<int>(currentDifficultyBeatmap, "get_difficulty");
+        std::string levelID = *il2cpp_utils::RunMethod<StringW>(THROW_UNLESS(il2cpp_utils::RunMethod(currentDifficultyBeatmap, "get_level")), "get_levelID");
+        std::string characteristic = *il2cpp_utils::RunMethod<StringW>(THROW_UNLESS(il2cpp_utils::RunMethod(THROW_UNLESS(il2cpp_utils::RunMethod(currentDifficultyBeatmap, "get_parentDifficultyBeatmapSet")), "get_beatmapCharacteristic")), "get_serializedName");
+        int difficulty = *il2cpp_utils::RunMethod<int>(currentDifficultyBeatmap, "get_difficulty");
 
         auto foundLevel = maxScoreValues.find(levelID);
         if (foundLevel == maxScoreValues.end()) return -1;
@@ -79,9 +79,9 @@ namespace ScoreUtils::MaxScoreRetriever{
     void RetrieveMaxScoreDataCustomCallback(function_ptr_t<void, int> callback){
         int score = currentDifficultyBeatmap != nullptr ? RetrieveMaxScoreDataFromCache() : -1;
         if (score != -1) return callback(score);
-        auto* internal = THROW_UNLESS(il2cpp_utils::FindMethodUnsafe("UnityEngine", "Resources", "FindObjectsOfTypeAll", 0));
-        auto* generic = THROW_UNLESS(il2cpp_utils::MakeGenericMethod(internal, {il2cpp_utils::GetClassFromName("", "PlayerDataModel")}));
-        auto model = THROW_UNLESS(il2cpp_utils::RunMethodRethrow<ArrayW<Il2CppObject*>, false>((Il2CppObject*)nullptr, generic)).get(0);
+        auto* method = THROW_UNLESS(il2cpp_utils::FindMethodUnsafe("UnityEngine", "Resources", "FindObjectsOfTypeAll", 0));
+        auto* generic = THROW_UNLESS(il2cpp_utils::MakeGenericMethod(method, {il2cpp_utils::GetClassFromName("", "PlayerDataModel")}));
+        auto* model = THROW_UNLESS(il2cpp_utils::RunStaticMethod<ArrayW<Il2CppObject*>>(generic)).get(0);
         auto* playerData = THROW_UNLESS(il2cpp_utils::RunMethod(model, "get_playerData"));
         RetrieveMaxScoreFromMapData(playerData, currentDifficultyBeatmap, callback);
     } 
