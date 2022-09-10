@@ -12,6 +12,6 @@
 #include "beatsaber-hook/shared/utils/typedefs-string.hpp"
 #include "beatsaber-hook/shared/utils/typedefs-delegate.hpp"
 
-Logger& getLogger();
+Logger& getMyLogger();
 
 void announceScoreAcquired(int x, function_ptr_t<void, int> callback = nullptr);

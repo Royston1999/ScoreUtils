@@ -5,7 +5,7 @@
 static ModInfo modInfo; // Stores the ID and version of our mod, and is sent to the modloader upon startup
 
 // Returns a logger, useful for printing debug messages
-Logger& getLogger() {
+Logger& getMyLogger() {
     static Logger* logger = new Logger(modInfo);
     return *logger;
 }
@@ -24,6 +24,6 @@ void ScoreUtils::Init(){
         isInit = true;
         setup(modInfo);
         InstallHooks();
-        getLogger().info("ScoreUtils has been initialised!");
+        getMyLogger().info("ScoreUtils has been initialised!");
     }
 }
