@@ -10,7 +10,6 @@
 #include "beatsaber-hook/shared/utils/il2cpp-functions.hpp"
 #include "beatsaber-hook/shared/utils/hooking.hpp"
 #include "beatsaber-hook/shared/utils/typedefs-string.hpp"
-#include "beatsaber-hook/shared/utils/typedefs-delegate.hpp"
 
 Logger& getMyLogger();
 

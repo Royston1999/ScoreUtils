@@ -8,20 +8,20 @@ using namespace il2cpp_utils;
 
 MAKE_HOOK_FIND_CLASS_UNSAFE_INSTANCE(MultiLevelStart, "", "MultiplayerLevelScenesTransitionSetupDataSO", "Init", void, Il2CppObject* self, StringW gameMode, Il2CppObject* previewBeatmapLevel, Il2CppObject beatmapDifficulty, Il2CppObject* beatmapCharacteristic, Il2CppObject* difficultyBeatmap, Il2CppObject* overrideColorScheme, Il2CppObject* gameplayModifiers, Il2CppObject* playerSpecificSettings, Il2CppObject* practiceSettings, bool useTestNoteCutSoundEffects){
     MultiLevelStart(self, gameMode, previewBeatmapLevel, beatmapDifficulty, beatmapCharacteristic, difficultyBeatmap, overrideColorScheme, gameplayModifiers, playerSpecificSettings, practiceSettings, useTestNoteCutSoundEffects);
-    auto* beatmap = THROW_UNLESS(RunMethod(self, "get_difficultyBeatmap"));
+    auto* beatmap = *RunMethod(self, "get_difficultyBeatmap");
     currentDifficultyBeatmap = beatmap;
     if (GetRetrievedMaxScoreCallback().size() >= 1){
-        auto* method = THROW_UNLESS(MakeGenericMethod(FindMethodUnsafe("UnityEngine", "Resources", "FindObjectsOfTypeAll", 0), {GetClassFromName("", "PlayerDataModel")}));
-        auto* model = THROW_UNLESS(RunStaticMethod<ArrayW<Il2CppObject*>, false>(method)).get(0);
-        auto* playerData = THROW_UNLESS(RunMethod(model, "get_playerData"));
+        auto* method = MakeGenericMethod(FindMethodUnsafe("UnityEngine", "Resources", "FindObjectsOfTypeAll", 0), {GetClassFromName("", "PlayerDataModel")});
+        auto* model = RunStaticMethod<ArrayW<Il2CppObject*>, false>(method)->get(0);
+        auto* playerData = *RunMethod(model, "get_playerData");
         acquireMaxScore(playerData, beatmap);
     }
 }
 
 MAKE_HOOK_FIND_CLASS_INSTANCE(LevelSelect, "", "StandardLevelDetailView", "RefreshContent", void, Il2CppObject* self) {
     LevelSelect(self);
-    auto* playerData = THROW_UNLESS(GetFieldValue(self, "_playerData"));
-    auto* beatmap = THROW_UNLESS(GetFieldValue(self, "_selectedDifficultyBeatmap"));
+    auto* playerData = *GetFieldValue(self, "_playerData");
+    auto* beatmap = *GetFieldValue(self, "_selectedDifficultyBeatmap");
     currentDifficultyBeatmap = beatmap;
     if (GetRetrievedMaxScoreCallback().size() >= 1) acquireMaxScore(playerData, beatmap);
 }
