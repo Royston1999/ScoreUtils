@@ -50,7 +50,7 @@ namespace ScoreUtils::MaxScoreRetriever{
         auto* envInfo = *RunStaticMethod(FindMethodUnsafe("", "BeatmapEnvironmentHelper", "GetEnvironmentInfo", 1), difficultyBeatmap);
         auto* settings = *RunMethod(playerData, "get_playerSpecificSettings");
         auto* task = *RunMethod(difficultyBeatmap, "GetBeatmapDataAsync", envInfo, settings);
-        taskMap.insert(std::make_pair(task, [=](Il2CppObject* mapData){
+        taskMap.insert(std::make_pair(task, [difficultyBeatmap, callback](Il2CppObject* mapData){
             int maxScore = mapData != nullptr ? *RunStaticMethod<int>(FindMethodUnsafe("", "ScoreModel", "ComputeMaxMultipliedScoreForBeatmap", 1), mapData) : -1;
             addMaxScoreData(difficultyBeatmap, maxScore);
             if (currentDifficultyBeatmap != difficultyBeatmap) return getMyLogger().info("Map no longer selected! Blocking callback!");
