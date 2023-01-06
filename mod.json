@@ -3,7 +3,7 @@
 	"name": "Score Utils",
 	"id": "ScoreUtils",
 	"author": "Polly51104",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"packageId": "com.beatgames.beatsaber",
 	"description": "retrieves score information about the selected map",
 	"isLibrary": true,

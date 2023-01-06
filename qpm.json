@@ -4,7 +4,7 @@
   "info": {
     "name": "Score Utils",
     "id": "scoreutils",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "url": null,
     "additionalData": {
       "overrideSoName": "libscoreutils.so"
