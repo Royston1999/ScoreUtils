@@ -1,5 +1,6 @@
 #include "ScoreUtils.hpp"
 #include "MaxScoreRetriever.hpp"
+#include "EasyDelegate.hpp"
 
 #include "custom-types/shared/delegate.hpp"
 
@@ -20,6 +21,9 @@
 
 using namespace GlobalNamespace;
 using namespace UnityEngine;
+using namespace System::Threading::Tasks;
+using namespace EasyDelegate;
+using namespace System;
 
 namespace ScoreUtils::MaxScoreRetriever{
     ScoreValuesMap maxScoreValues;
@@ -57,19 +61,15 @@ namespace ScoreUtils::MaxScoreRetriever{
         int maxScore = foundDiff->second;
         return maxScore;
     }
-
-    using MapTask = System::Threading::Tasks::Task_1<IReadonlyBeatmapData*>;
-    using Task = System::Threading::Tasks::Task;
-    using Action = System::Action_1<Task*>;
-    using Function = std::function<void(MapTask*)>;
-
-    #define MapTaskFinish(Func) custom_types::MakeDelegate<Action*>(classof(Action*), static_cast<Function>(Func)) \
+    
+    using MapTask = Task_1<IReadonlyBeatmapData*>;
+    using Action = Action_1<Task*>;
 
     void RetrieveMaxScoreFromMapData(PlayerData* playerData, IDifficultyBeatmap* difficultyBeatmap, function_ptr_t<void, int> callback){
         currentlySelectedMap = difficultyBeatmap;
         EnvironmentInfoSO* envInfo = BeatmapEnvironmentHelper::GetEnvironmentInfo(difficultyBeatmap);
         PlayerSpecificSettings* settings = playerData->playerSpecificSettings;
-        reinterpret_cast<Task*>(difficultyBeatmap->GetBeatmapDataAsync(envInfo, settings))->ContinueWith(MapTaskFinish([=](MapTask* result){
+        reinterpret_cast<Task*>(difficultyBeatmap->GetBeatmapDataAsync(envInfo, settings))->ContinueWith(MakeDelegate<Action*>([=](MapTask* result){
             IReadonlyBeatmapData* mapData = result->get_ResultOnSuccess();
             int maxScore = mapData != nullptr ? ScoreModel::ComputeMaxMultipliedScoreForBeatmap(mapData) : -1;
             addMaxScoreData(difficultyBeatmap, maxScore);
