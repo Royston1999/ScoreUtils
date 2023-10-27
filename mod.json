@@ -1,17 +1,18 @@
 {
-	"_QPVersion": "0.1.1",
-	"name": "Score Utils",
-	"id": "ScoreUtils",
-	"author": "Polly51104",
-	"version": "0.1.1",
-	"packageId": "com.beatgames.beatsaber",
-	"description": "retrieves score information about the selected map",
-	"isLibrary": true,
-	"dependencies": [],
-	"modFiles": [],
-	"libraryFiles": [
-		"libscoreutils.so",
-		"libbeatsaber-hook_3_14_0.so"
-	],
-	"fileCopies": []
+  "_QPVersion": "0.1.1",
+  "name": "Score Utils",
+  "id": "scoreutils",
+  "author": "Polly51104",
+  "version": "0.1.1",
+  "packageId": "com.beatgames.beatsaber",
+  "description": "shows extra information after completing a level",
+  "isLibrary": true,
+  "dependencies": [],
+  "modFiles": [],
+  "libraryFiles": [
+    "libscoreutils.so",
+    "libbeatsaber-hook_3_14_0.so"
+  ],
+  "fileCopies": [],
+  "copyExtensions": []
 }

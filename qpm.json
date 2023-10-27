@@ -5,9 +5,10 @@
     "name": "Score Utils",
     "id": "scoreutils",
     "version": "0.1.1",
-    "url": null,
+    "url": "https://github.com/Royston1999/ScoreUtils/",
     "additionalData": {
-      "overrideSoName": "libscoreutils.so"
+      "overrideSoName": "libscoreutils.so",
+      "modLink": "https://github.com/Royston1999/ScoreUtils/releases/download/v0.1.1/ScoreUtils.qmod"
     }
   },
   "dependencies": [
