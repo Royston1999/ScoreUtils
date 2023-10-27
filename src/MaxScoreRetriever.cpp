@@ -31,6 +31,7 @@ namespace ScoreUtils::MaxScoreRetriever{
     }
 
     int RetrieveMaxScoreDataFromCache(){
+        if (!currentDifficultyBeatmap) return -1;
         std::string levelID = *RunMethod<StringW>(*RunMethod(currentDifficultyBeatmap, "get_level"), "get_levelID");
         std::string charac = *RunMethod<StringW>(*RunMethod(*RunMethod(currentDifficultyBeatmap, "get_parentDifficultyBeatmapSet"), "get_beatmapCharacteristic"), "get_serializedName");
         int difficulty = *RunMethod<int>(currentDifficultyBeatmap, "get_difficulty");
